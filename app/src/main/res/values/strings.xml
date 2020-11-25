@@ -8,4 +8,20 @@
     <string name="Handcuffs">Наручники</string>
     <string name="crime_date">Crime Date</string>
     <string name="crime_title">Crime Title</string>
+    <string name="new_crime">Новое приступление</string>
+    <string name="crime_report">%1$s! Преступление было совершено %2$s. %3$s, и %4$s</string>
+    <string name="crime_report_solved">Дело раскрыто</string>
+    <string name="crime_report_unsolved">Дело не раскрыто</string>
+    <string name="crime_report_no_suspect">нет подозреваемого.</string>
+    <string name="crime_report_suspect">подозреваемый %s.</string>
+    <string name="crime_report_subject">Отчет о преступном умысле</string>
+    <string name="send_report">Отправить отчет о преступлении через</string>
+    <string name="empty_list">Список пока пуст :( , но не расстраивайтесь, скоро кто-то обязательно на кого нибудь пожалуется</string>
+    <string name="crime_suspect_text">Выберите подозреваемого</string>
+    <string name="crime_report_text">Отправить отчет о преступлении</string>
+    <string name="crime_call">звонок подозреваемому</string>
+    <string name="detailed_photo">подробное фото приступление</string>
+    <string name="crime_photo_button_description">Take photo of crime scene</string>
+    <string name="crime_photo_no_image_description">Crime scene photo (not set)</string>
+    <string name="crime_photo_image_description">Crime scene photo (set)</string>
 </resources>
