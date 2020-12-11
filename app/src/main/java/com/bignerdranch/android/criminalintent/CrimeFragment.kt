@@ -13,6 +13,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -46,6 +47,9 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
     private lateinit var photoView: ImageView
     private lateinit var photoFile: File
     private lateinit var photoUri: Uri
+    private lateinit var treeObserver: ViewTreeObserver
+    private var viewWidth = 0
+    private var viewHeight = 0
 
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProvider(this).get(CrimeDetailViewModel::class.java)
@@ -97,17 +101,13 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
 
         val titleWatcher = object : TextWatcher {
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 crime.title = s.toString()
             }
 
-            override fun afterTextChanged(s: Editable?) {
-
-            }
+            override fun afterTextChanged(s: Editable?) {}
         }
 
         titleField.addTextChangedListener(titleWatcher)
@@ -151,6 +151,14 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
                 val chooserIntent =
                     Intent.createChooser(intent, getString(R.string.send_report))
                 startActivity(chooserIntent)
+            }
+
+            photoView.viewTreeObserver.apply {
+                if (isAlive) {
+                    addOnGlobalLayoutListener {
+                        updatePhotoView()
+                    }
+                }
             }
         }
 
@@ -204,6 +212,12 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
                 startActivityForResult(captureImage, REQUEST_PHOTO)
             }
         }
+
+        treeObserver = photoButton.viewTreeObserver
+        treeObserver.addOnGlobalLayoutListener {
+            viewWidth = photoView.width
+            viewHeight = photoView.height
+        }
     }
 
 
@@ -233,7 +247,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
 
     private fun updatePhotoView() {
         if (photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            val bitmap = getScaledBitmap(photoFile.path, photoView.width, photoView.height)
             photoView.setImageBitmap(bitmap)
             photoView.contentDescription = getString(R.string.crime_photo_image_description)
         } else {
@@ -328,5 +342,4 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks, TimePickerFragme
         crime.date = date
         updateUI()
     }
-
 }
